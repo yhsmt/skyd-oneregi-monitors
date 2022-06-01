@@ -11,10 +11,9 @@ if (lackOfEnvironmentVals()) {
 
 const app = new cdk.App();
 
-const stack = new OneregiMonitorsStack(app, params.Common.StackName, {
-});
+const stack = new OneregiMonitorsStack(app, params.Common.stackName);
 
-const tags = params.Common.Tags;
+const tags = params.Common.tags;
 let k: keyof typeof tags;
 for (k in tags) {
     cdk.Tags.of(stack).add(k, tags[k]);

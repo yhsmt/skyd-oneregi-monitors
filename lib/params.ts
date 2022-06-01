@@ -4,14 +4,18 @@ const prod = 'prod';
 const stg = 'stg';
 
 export const Common = {
-    StackName: stackName,
-    AppStage: appStage,
-    AppStageProd: prod,
-    AppStageStg: stg,
-    AppStageIsProd: (appStage == prod),
-    AppStageIsStg: (appStage == stg),
-    Tags: {
-        'StackName': stackName,
-        'Environment': appStage,
+    stackName: stackName,
+    appStage: appStage,
+    appStageProd: prod,
+    appStageStg: stg,
+    appStageIsProd: (appStage == prod),
+    appStageIsStg: (appStage == stg),
+    tags: {
+        StackName: stackName,
+        Environment: appStage,
     }
 };
+
+export const Lambda = {
+    functionArn: 'arn:aws:lambda:ap-northeast-1:034569540981:function:oneregi-app-api-dev-app',
+}
