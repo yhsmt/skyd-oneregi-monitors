@@ -112,3 +112,25 @@ const rdsWidgetWithInstances = (
         period: Duration.seconds(60),
     })
 }
+
+export const rdsSlowQueryLogCount = (): GraphWidget => {
+    const metrics = params.RDS.clusterNames.map(
+        clusterName => new Metric({
+            namespace: 'AWS/Logs',
+            metricName: 'IncomingLogEvents',
+            dimensionsMap: {
+                LogGroupName: '/aws/rds/cluster/' + clusterName + '/slowquery'
+            },
+        })
+    );
+
+    return new GraphWidget({
+        title: 'RDS スロークエリログ発生数',
+        region: params.Region.TKO,
+        left: metrics,
+        width: 6,
+        statistic: 'SampleCount',
+        view: GraphWidgetView.TIME_SERIES,
+        period: Duration.seconds(60),
+    })
+}

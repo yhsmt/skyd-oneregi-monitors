@@ -12,12 +12,6 @@ export class OneregiMonitorsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const lambdaFunction = Function.fromFunctionArn(
-        this,
-        name('sample-function'),
-        params.Lambda.functionArn,
-    );
-
     // Create CloudWatch Dashboard
     const dashboard = new Dashboard(this, "SampleLambdaDashboard", {
       dashboardName: name('sample-dashboard'),
@@ -32,9 +26,18 @@ export class OneregiMonitorsStack extends Stack {
             widgets.rdsProxyConnections(),
             widgets.rdsConnections(),
             widgets.rdsDmlLatency(),
+        ],[
             widgets.rdsCpuUtilization(),
             widgets.rdsFreeableMemory(),
+            widgets.rdsSlowQueryLogCount(),
+            widgets.sqsNumOfVisibleMessages(),
+        ],[
+            widgets.dynamodbReadCapacity(),
+            widgets.dynamodbWriteCapacity(),
             widgets.lambdaConcurrentExecs(),
+            widgets.lambdaErrorLogsCount(),
+        ],[
+            widgets.wafBlockedRequests(),
         ]
       ],
     });

@@ -24,6 +24,38 @@ export const Common = {
     }
 };
 
+export const DynamoDB = {
+    tableNames: [
+        'prd_visitinformation_table',
+        'prd_orderinformation_table',
+        'prd_cashcheck_table',
+        'prd_businessdayinformation_table',
+        'prd_accountinginformation_table',
+    ],
+};
+
+export const Lambda = {
+    functionNames: [
+        'oneregi-app-api-prod-app',
+        'oneregi-backend-prod-app',
+        'oneregi-backend-managementScreen-prod-app',
+    ]
+}
+
+export const Region = {
+    VA: 'us-east-1',
+    TKO: 'ap-northeast-1',
+}
+
+export const RDS = {
+    proxyNames: ['oneregi-prd-rdsproxy'],
+    clusterNames: ['oneregi-prd-rds-cluster'],
+    dbInstances: [
+        'oneregi-prd-rds-01',
+        'oneregi-prd-rds-02',
+    ],
+}
+
 export const Route53 = {
     cfHealthChecks: [
         {
@@ -45,21 +77,14 @@ export const Route53 = {
     ],
 }
 
-export const Lambda = {
-    functionArn: 'arn:aws:lambda:ap-northeast-1:034569540981:function:oneregi-app-api-dev-app',
+export const SQS = {
+    queueNames: ['oneregi-prd-app-001']
 }
 
-
-export const RDS = {
-    proxyNames: ['oneregi-prd-rdsproxy'],
-    clusterNames: ['oneregi-prd-rds-cluster'],
-    dbInstances: [
-        'oneregi-prd-rds-01',
-        'oneregi-prd-rds-02',
-    ],
-}
-
-export const Region = {
-    VA: 'us-east-1',
-    TKO: 'ap-northeast-1',
+export const WAF = {
+    aclNames: [
+        'oneregi-app-api-prod',
+        'oneregi-backend-api-prod',
+        'oneregi-managementScreen-api-prod',
+    ]
 }
