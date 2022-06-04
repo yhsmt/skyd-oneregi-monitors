@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { OneregiMonitorsStack } from '../lib/oneregi-monitors-stack';
-import { lackOfEnvironmentVals } from "../lib/utils";
-import * as params from "../lib/params";
+
+import { OneregiMonitorsStack } from 'oneregi-monitors-stack';
+import { lackOfEnvironmentVals } from "utils";
+import * as params from "params";
 
 if (lackOfEnvironmentVals()) {
     throw new Error('lack of environment variables.');

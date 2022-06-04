@@ -3,9 +3,9 @@ import {Dashboard} from 'aws-cdk-lib/aws-cloudwatch';
 import {Function} from "aws-cdk-lib/aws-lambda";
 import {Construct} from 'constructs';
 
-import * as params from './params';
-import {name} from './utils';
-import * as widgets from './widgets'
+import * as params from 'params';
+import {name} from 'utils';
+import * as widgets from 'widgets'
 
 
 export class OneregiMonitorsStack extends Stack {
@@ -20,12 +20,19 @@ export class OneregiMonitorsStack extends Stack {
 
     // Create CloudWatch Dashboard
     const dashboard = new Dashboard(this, "SampleLambdaDashboard", {
-      dashboardName: name('sample-dashboard')
+      dashboardName: name('sample-dashboard'),
+      widgets: [
+        [
+          widgets.route53CfHealthChecks(),
+          widgets.route53ApiGwHealthChecks(),
+          widgets.apiGatewayRequests(),
+          widgets.apiGatewayLatency(),
+        ],[
+          widgets.apiGateway5XXError(),
+          widgets.lambdaConcurrentExecs(),
+        ]
+      ],
     });
-
-    widgets.route53CfHealthChecks(dashboard);
-    widgets.route53ApiGwHealthChecks(dashboard);
-    widgets.lambdaConcurrentExecs(dashboard);
 
     // Generate Outputs
     const cloudwatchDashboardURL = `https://${Aws.REGION}.console.aws.amazon.com/cloudwatch/home?region=${Aws.REGION}#dashboards:name=${dashboard.dashboardName}`;

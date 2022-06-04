@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/oneregi-monitors.ts",
+  "app": "npx ts-node -r tsconfig-paths/register bin/oneregi-monitors.ts",
   "watch": {
     "include": [
       "**"

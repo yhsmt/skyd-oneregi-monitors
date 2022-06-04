@@ -3,6 +3,14 @@ const stackName = appStage + '-oneregi-monitors-stack';
 const prod = 'prod';
 const stg = 'stg';
 
+export const ApiGateway = {
+    apiNames: [
+        'prod-oneregi-app-api',
+        'prod-oneregi-backend',
+        'prod-oneregi-backend-managementScreen',
+    ]
+}
+
 export const Common = {
     stackName: stackName,
     appStage: appStage,
@@ -39,4 +47,9 @@ export const Route53 = {
 
 export const Lambda = {
     functionArn: 'arn:aws:lambda:ap-northeast-1:034569540981:function:oneregi-app-api-dev-app',
+}
+
+export const Region = {
+    VA: 'us-east-1',
+    TKO: 'ap-northeast-1',
 }
