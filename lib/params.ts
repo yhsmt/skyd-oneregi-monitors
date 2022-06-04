@@ -49,6 +49,16 @@ export const Lambda = {
     functionArn: 'arn:aws:lambda:ap-northeast-1:034569540981:function:oneregi-app-api-dev-app',
 }
 
+
+export const RDS = {
+    proxyNames: ['oneregi-prd-rdsproxy'],
+    clusterNames: ['oneregi-prd-rds-cluster'],
+    dbInstances: [
+        'oneregi-prd-rds-01',
+        'oneregi-prd-rds-02',
+    ],
+}
+
 export const Region = {
     VA: 'us-east-1',
     TKO: 'ap-northeast-1',

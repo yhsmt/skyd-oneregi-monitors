@@ -23,13 +23,18 @@ export class OneregiMonitorsStack extends Stack {
       dashboardName: name('sample-dashboard'),
       widgets: [
         [
-          widgets.route53CfHealthChecks(),
-          widgets.route53ApiGwHealthChecks(),
-          widgets.apiGatewayRequests(),
-          widgets.apiGatewayLatency(),
+            widgets.route53CfHealthChecks(),
+            widgets.route53ApiGwHealthChecks(),
+            widgets.apiGatewayRequests(),
+            widgets.apiGatewayLatency(),
         ],[
-          widgets.apiGateway5XXError(),
-          widgets.lambdaConcurrentExecs(),
+            widgets.apiGateway5XXError(),
+            widgets.rdsProxyConnections(),
+            widgets.rdsConnections(),
+            widgets.rdsDmlLatency(),
+            widgets.rdsCpuUtilization(),
+            widgets.rdsFreeableMemory(),
+            widgets.lambdaConcurrentExecs(),
         ]
       ],
     });
