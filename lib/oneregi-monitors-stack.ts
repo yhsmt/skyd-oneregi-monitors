@@ -23,7 +23,8 @@ export class OneregiMonitorsStack extends Stack {
       dashboardName: name('sample-dashboard')
     });
 
-    widgets.route53CFnHealthChecks(dashboard);
+    widgets.route53CfHealthChecks(dashboard);
+    widgets.route53ApiGwHealthChecks(dashboard);
     widgets.lambdaConcurrentExecs(dashboard);
 
     // Generate Outputs

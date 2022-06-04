@@ -1,6 +1,7 @@
 {
   "name": "oneregi-monitors",
   "version": "0.1.0",
+  "license": "MIT",
   "bin": {
     "oneregi-monitors": "bin/oneregi-monitors.js"
   },
