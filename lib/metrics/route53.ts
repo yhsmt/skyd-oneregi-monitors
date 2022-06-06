@@ -8,7 +8,12 @@ import {
 import * as params from 'params'
 import {name} from 'utils'
 
-export const healthCheck = (
+export type HealthCheck = {
+    healthCheck: r53.CfnHealthCheck,
+    name: string
+}
+
+export const createHealthCheck = (
     construct: Construct,
     nameTrunk: string,
     hostDomainName: string,

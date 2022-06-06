@@ -21,19 +21,41 @@ export const Region = {
     TKO: 'ap-northeast-1',
 }
 
+type typeApiGateway = {
+    apis: {
+        name: string
+        apiId: string,
+    }[],
+}
+
+type typeRds = {
+    proxyNames: string[],
+    clusters: {
+        id: string,
+        instanceIds: string[],
+    }[]
+}
 
 /***** ここから対象リソース設定 *****/
 
-export const ApiGateway = {
-    apiNames: [
-        'prod-oneregi-app-api',
-        'prod-oneregi-backend',
-        'prod-oneregi-backend-managementScreen',
+export const ApiGateway: typeApiGateway = {
+    apis: [
+        {
+            name: 'prod-oneregi-app-api',
+            apiId: 'mbwiw2h1m9',
+        },{
+            name: 'prod-oneregi-backend',
+            apiId: 'nb94z4qdph',
+        },{
+            name: 'prod-oneregi-backend-managementScreen',
+            apiId: 'rub5sw5st0',
+        }
     ],
-    apiIds: [
-        'mbwiw2h1m9',  // prod-oneregi-app-api
-        'nb94z4qdph',  // prod-oneregi-backend
-        'rub5sw5st0',  // prod-oneregi-backend-managementScreen
+}
+
+export const CloudFront = {
+    distURLs: [
+        'admin.one-regi.net',
     ]
 }
 
@@ -55,33 +77,16 @@ export const Lambda = {
     ]
 }
 
-export const RDS = {
+export const RDS: typeRds = {
     proxyNames: ['oneregi-prd-rdsproxy'],
-    clusterNames: ['oneregi-prd-rds-cluster'],
-    dbInstances: [
-        'oneregi-prd-rds-01',
-        'oneregi-prd-rds-02',
-    ],
-}
-
-export const Route53 = {
-    cfHealthChecks: [
+    clusters: [
         {
-            name: 'oneregi-prd-frontend-healthcheck',
-            id: 'd074c66b-189b-4f97-9ff3-83ea343d1f37',
-        },
-    ],
-    apigwHealthChecks: [
-        {
-            name: 'prod-oneregi-app-api',
-            id: '0691aa14-e8a7-4565-a1ac-c879cb23b5d8',
-        }, {
-            name: 'prod-oneregi-backend',
-            id: 'f6ca7ace-6ff0-4549-9eaf-1919999af5a8',
-        }, {
-            name: 'prod-oneregi-backend-managementScreen',
-            id: ' f26dd03d-c66d-4487-9640-e0688ad6e37e',
-        },
+            id: 'oneregi-prd-rds-cluster',
+            instanceIds: [
+                'oneregi-prd-rds-01',
+                'oneregi-prd-rds-02',
+            ],
+        }
     ],
 }
 

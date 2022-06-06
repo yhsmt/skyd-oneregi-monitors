@@ -36,14 +36,14 @@ const apiGatewayWidget = (
     statistic: string,
     period_sec: number,
     ): GraphWidget => {
-    const metrics = params.ApiGateway.apiNames.map(
-        apiName => new Metric({
+    const metrics = params.ApiGateway.apis.map(
+        api => new Metric({
             namespace: 'AWS/ApiGateway',
             metricName: metricName,
             dimensionsMap: {
-                ApiName: apiName,
+                ApiName: api.name,
             },
-            label: apiName,
+            label: api.name,
         })
     );
 

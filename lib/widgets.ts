@@ -8,22 +8,29 @@ import * as lambda from 'widgets/lambda';
 import * as rds from 'widgets/rds';
 import * as r53 from 'widgets/route53';
 
+import {HealthCheck} from 'metrics/route53';
+import {IDatabaseCluster} from 'aws-cdk-lib/aws-rds';
+
 // INFO: dashboardのwidgetの順番
-export const widgets = (apis: IRestApi[]): GraphWidget[][] => {
+export const widgets = (
+    cfdHc: HealthCheck[],
+    apiHc: HealthCheck[],
+    rdsCs: IDatabaseCluster[],
+    ): GraphWidget[][] => {
     return [
         [
-            r53.route53CfHealthChecks(),
-            r53.route53ApiGwHealthChecks(),
-            apigw.apiGatewayRequests(apis),
-            apigw.apiGatewayLatency(apis),
+            r53.route53CfHealthChecks(cfdHc),
+            r53.route53ApiGwHealthChecks(apiHc),
+            apigw.apiGatewayRequests(),
+            apigw.apiGatewayLatency(),
         ],[
-            apigw.apiGateway5XXError(apis),
+            apigw.apiGateway5XXError(),
             rds.rdsProxyConnections(),
             rds.rdsConnections(),
             rds.rdsDmlLatency(),
         ],[
-            rds.rdsCpuUtilization(),
-            rds.rdsFreeableMemory(),
+            rds.rdsCpuUtilization(rdsCs),
+            rds.rdsFreeableMemory(rdsCs),
             rds.rdsSlowQueryLogCount(),
             etc.sqsNumOfVisibleMessages(),
         ],[
