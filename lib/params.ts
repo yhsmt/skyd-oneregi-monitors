@@ -3,14 +3,6 @@ const stackName = appStage + '-oneregi-monitors-stack';
 const prod = 'prod';
 const stg = 'stg';
 
-export const ApiGateway = {
-    apiNames: [
-        'prod-oneregi-app-api',
-        'prod-oneregi-backend',
-        'prod-oneregi-backend-managementScreen',
-    ]
-}
-
 export const Common = {
     stackName: stackName,
     appStage: appStage,
@@ -23,6 +15,27 @@ export const Common = {
         Environment: appStage,
     }
 };
+
+export const Region = {
+    VA: 'us-east-1',
+    TKO: 'ap-northeast-1',
+}
+
+
+/***** ここから対象リソース設定 *****/
+
+export const ApiGateway = {
+    apiNames: [
+        'prod-oneregi-app-api',
+        'prod-oneregi-backend',
+        'prod-oneregi-backend-managementScreen',
+    ],
+    apiIds: [
+        'mbwiw2h1m9',  // prod-oneregi-app-api
+        'nb94z4qdph',  // prod-oneregi-backend
+        'rub5sw5st0',  // prod-oneregi-backend-managementScreen
+    ]
+}
 
 export const DynamoDB = {
     tableNames: [
@@ -40,11 +53,6 @@ export const Lambda = {
         'oneregi-backend-prod-app',
         'oneregi-backend-managementScreen-prod-app',
     ]
-}
-
-export const Region = {
-    VA: 'us-east-1',
-    TKO: 'ap-northeast-1',
 }
 
 export const RDS = {
