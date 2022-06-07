@@ -16,8 +16,8 @@ export const importLambdaLogGroups = (construct: Construct): logs.ILogGroup[] =>
     return params.Lambda.functionNames.map(
         _name => logs.LogGroup.fromLogGroupName(
             construct,
-            name('imported-lambda-logs-' + _name),
-            '/aws/lambda/' + _name,
+            name(`imported-lambda-logs-${_name}`),
+            `/aws/lambda/${_name}`,
         )
     )
 }

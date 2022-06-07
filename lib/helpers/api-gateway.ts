@@ -15,7 +15,7 @@ export const importRestApis = (construct: Construct): ImportedApi[] => {
             return {
                 api: RestApi.fromRestApiId(
                     construct,
-                    name('imported-restapi-' + api.apiId),
+                    name(`imported-restapi-${api.apiId}`),
                     api.apiId
                 ),
                 name: api.name

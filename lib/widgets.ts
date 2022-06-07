@@ -1,5 +1,5 @@
 import {IRestApi} from 'aws-cdk-lib/aws-apigateway';
-import {GraphWidget} from "aws-cdk-lib/aws-cloudwatch";
+import {GraphWidget} from 'aws-cdk-lib/aws-cloudwatch';
 
 import * as apigw from 'widgets/api-gateway';
 import * as dynamodb from 'widgets/dynamodb';

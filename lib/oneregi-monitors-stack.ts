@@ -1,12 +1,9 @@
 import {
-  Aws,
-  CfnOutput,
-  Stack,
-  StackProps,
-} from "aws-cdk-lib";
+  Aws, CfnOutput, Stack, StackProps
+} from 'aws-cdk-lib';
 import {Dashboard} from 'aws-cdk-lib/aws-cloudwatch';
 import {IDatabaseCluster} from 'aws-cdk-lib/aws-rds';
-import {ILogGroup, MetricFilter} from 'aws-cdk-lib/aws-logs';
+import {ILogGroup} from 'aws-cdk-lib/aws-logs';
 import {Construct} from 'constructs';
 
 import * as params from 'params';
@@ -34,7 +31,7 @@ export class OneregiMonitorsStack extends Stack {
     const lambdaLogsMetricsFilters: typeMetricFilter[] = this.getLambdaLogsMetricsFilters();
 
     // CloudWatch Dashboard
-    const dashboard = new Dashboard(this, "SampleLambdaDashboard", {
+    const dashboard = new Dashboard(this, 'SampleLambdaDashboard', {
       dashboardName: name('sample-dashboard'),
       widgets: widgets(
           cfHealthChecks,
@@ -82,9 +79,9 @@ export class OneregiMonitorsStack extends Stack {
           return {
             healthCheck: createHealthCheck(
                 this,
-                'rest-api-' + restApi.api.restApiId,
-                restApi.api.restApiId + '.execute-api.' + Aws.REGION + '.amazonaws.com',
-                '/' + (restApi.api.deploymentStage ?? 'prod') + '/ping'
+                `rest-api-${restApi.api.restApiId}`,
+                `${restApi.api.restApiId}.execute-api.${Aws.REGION}.amazonaws.com`,
+                `/${(restApi.api.deploymentStage ?? 'prod')}/ping`
             ),
             name: restApi.name,
           };
@@ -97,7 +94,7 @@ export class OneregiMonitorsStack extends Stack {
         cfdURL => {
           return {
             healthCheck: createHealthCheck(
-                this, 'cf-' + cfdURL, cfdURL, '/'
+                this, `cf-${cfdURL}`, cfdURL, '/'
             ),
             name: cfdURL,
           }

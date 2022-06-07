@@ -12,7 +12,7 @@ export const createMetricFilter = (
 ): logs.MetricFilter => {
     return new logs.MetricFilter(
         construct,
-        name('oneregi-logs-metric-filters-'+metricName),
+        name(`oneregi-logs-metric-filters-${metricName}`),
         {
             logGroup: logGroup,
             metricNamespace: metricNamespace,

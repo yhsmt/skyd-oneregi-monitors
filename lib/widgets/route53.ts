@@ -1,5 +1,5 @@
-import {GraphWidget, GraphWidgetView, Metric} from "aws-cdk-lib/aws-cloudwatch";
-import {Duration} from "aws-cdk-lib";
+import {GraphWidget, GraphWidgetView, Metric} from 'aws-cdk-lib/aws-cloudwatch';
+import {Duration} from 'aws-cdk-lib';
 
 import * as params from 'params'
 import {HealthCheck} from 'metrics/route53';
@@ -14,7 +14,7 @@ export const route53CfHealthChecks = (healthchecks: HealthCheck[]): GraphWidget 
 export const route53ApiGwHealthChecks = (healthchecks: HealthCheck[]): GraphWidget => {
     return route53HealthChecks(
         healthchecks,
-        "ApiGateway ヘルスチェック",
+        'ApiGateway ヘルスチェック',
     );
 }
 

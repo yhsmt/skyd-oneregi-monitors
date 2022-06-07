@@ -1,5 +1,5 @@
-import {GraphWidget, GraphWidgetView, Metric} from "aws-cdk-lib/aws-cloudwatch";
-import {Duration} from "aws-cdk-lib";
+import {GraphWidget, GraphWidgetView, Metric} from 'aws-cdk-lib/aws-cloudwatch';
+import {Duration} from 'aws-cdk-lib';
 
 import * as params from 'params'
 

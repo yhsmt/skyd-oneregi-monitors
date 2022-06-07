@@ -1,4 +1,4 @@
-const appStage = process.env.CDK_APP_STAGE || "";
+const appStage = process.env.CDK_APP_STAGE || '';
 const stackName = appStage + '-oneregi-monitors-stack';
 const prod = 'prod';
 const stg = 'stg';

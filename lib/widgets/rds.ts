@@ -1,6 +1,6 @@
-import {GraphWidget, GraphWidgetView, Metric} from "aws-cdk-lib/aws-cloudwatch";
+import {GraphWidget, GraphWidgetView, Metric} from 'aws-cdk-lib/aws-cloudwatch';
 import {IDatabaseCluster} from 'aws-cdk-lib/aws-rds';
-import {Duration} from "aws-cdk-lib";
+import {Duration} from 'aws-cdk-lib';
 
 import * as params from 'params'
 

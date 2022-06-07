@@ -1,11 +1,8 @@
 import {Construct} from 'constructs';
-import {GraphWidget, GraphWidgetView, Metric} from "aws-cdk-lib/aws-cloudwatch";
 import {
-    Duration,
     aws_route53 as r53,
 } from "aws-cdk-lib";
 
-import * as params from 'params'
 import {name} from 'utils'
 
 export type HealthCheck = {
@@ -50,7 +47,7 @@ export const createHealthCheck = (
 
     return new r53.CfnHealthCheck(
         construct,
-        name('oneregi-health-check' + nameTrunk),
+        name(`oneregi-health-check-${nameTrunk}`),
         props,
     );
 }

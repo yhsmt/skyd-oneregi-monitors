@@ -1,7 +1,8 @@
-import {GraphWidget, GraphWidgetView, Metric} from "aws-cdk-lib/aws-cloudwatch";
-import {Duration} from "aws-cdk-lib";
+import {GraphWidget, GraphWidgetView} from 'aws-cdk-lib/aws-cloudwatch';
+import {Duration} from 'aws-cdk-lib';
 
 import * as params from 'params'
+import { apiGatewayMetrics } from 'metrics/api-gateway';
 
 export const apiGatewayRequests = (): GraphWidget => {
     return apiGatewayWidget(
@@ -36,17 +37,7 @@ const apiGatewayWidget = (
     statistic: string,
     period_sec: number,
     ): GraphWidget => {
-    const metrics = params.ApiGateway.apis.map(
-        api => new Metric({
-            namespace: 'AWS/ApiGateway',
-            metricName: metricName,
-            dimensionsMap: {
-                ApiName: api.name,
-            },
-            label: api.name,
-        })
-    );
-
+    const metrics = apiGatewayMetrics(metricName)
     return new GraphWidget({
         title: title,
         region: params.Region.TKO,

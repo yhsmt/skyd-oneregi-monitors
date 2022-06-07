@@ -8,7 +8,7 @@ export const importRdsClusters = (construct: Construct): IDatabaseCluster[] => {
     return params.RDS.clusters.map(
         cluster => DatabaseCluster.fromDatabaseClusterAttributes(
             construct,
-            name('imported-rds-cluster' + cluster.id),
+            name(`imported-rds-cluster-${cluster.id}`),
             {
                 clusterIdentifier: cluster.id,
                 instanceIdentifiers: cluster.instanceIds,
