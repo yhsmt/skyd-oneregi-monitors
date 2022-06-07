@@ -9,12 +9,12 @@ import {ImportedApi, importRestApis} from 'helpers/api-gateway'
 import * as params from 'params';
 import {name} from 'utils'
 
-export type HealthCheckAndName = {
+export type HealthCheckWithName = {
     healthCheck: r53.CfnHealthCheck,
     name: string
 }
 
-export const getApiHealthChecks = (construct: Construct): HealthCheckAndName[] => {
+export const getApiHealthChecks = (construct: Construct): HealthCheckWithName[] => {
     const restApis: ImportedApi[] = importRestApis(construct);
     return restApis.map(
         restApi => {
@@ -31,7 +31,7 @@ export const getApiHealthChecks = (construct: Construct): HealthCheckAndName[] =
     );
   }
 
-export const getCfHealthChecks = (construct: Construct): HealthCheckAndName[] => {
+export const getCfHealthChecks = (construct: Construct): HealthCheckWithName[] => {
     return params.CloudFront.distURLs.map(
         cfdURL => {
           return {

@@ -7,48 +7,31 @@ import * as lambda from 'widgets/lambda';
 import * as rds from 'widgets/rds';
 import * as r53 from 'widgets/route53';
 
-import {IDatabaseCluster} from 'aws-cdk-lib/aws-rds';
-import { typeMetricFilter } from 'helpers/logs';
+import { Metrics } from 'metrics';
 
 // INFO: dashboardのwidgetの順番
-export const widgets = (
-    cfdHc: Metric[],
-    apiHc: Metric[],
-
-    apigwCt: Metric[],
-    apigwLtc: Metric[],
-    apigw5xx: Metric[],
-
-    rdsPrxy: Metric[],
-    rdsConn: Metric[],
-    rdsDLtcy: Metric[],
-    rdsCpu: Metric[],
-    rdsMem: Metric[],
-    rdsSlqc: Metric[],
-
-    errLFs: typeMetricFilter[],
-    ): GraphWidget[][] => {
+export const widgets = (m: Metrics): GraphWidget[][] => {
     return [
         [
-            r53.route53CfHealthChecks(cfdHc),
-            r53.route53ApiGwHealthChecks(apiHc),
-            apigw.apiGatewayRequests(apigwCt),
-            apigw.apiGatewayLatency(apigwLtc),
+            r53.route53CfHealthChecks(m.cfHealthCheckMetrics),
+            r53.route53ApiGwHealthChecks(m.apiHealthChecksMetrics),
+            apigw.apiGatewayRequests(m.apiCountMetrics),
+            apigw.apiGatewayLatency(m.apiLatencyMetrics),
         ],[
-            apigw.apiGateway5XXError(apigw5xx),
-            rds.rdsProxyConnections(rdsPrxy),
-            rds.rdsConnections(rdsConn),
-            rds.rdsDmlLatency(rdsDLtcy),
+            apigw.apiGateway5XXError(m.api5XXErrorMetrics),
+            rds.rdsProxyConnections(m.rdsProxyConnMetrics),
+            rds.rdsConnections(m.rdsConnectionMetrics),
+            rds.rdsDmlLatency(m.rdsDmlLatencyMetrics),
         ],[
-            rds.rdsCpuUtilization(rdsCpu),
-            rds.rdsFreeableMemory(rdsMem),
-            rds.rdsSlowQueryLogCount(rdsSlqc),
+            rds.rdsCpuUtilization(m.rdsCpuUsageMetrics),
+            rds.rdsFreeableMemory(m.rdsFreeMemMetrics),
+            rds.rdsSlowQueryLogCount(m.rdsSlowQueryLogCount),
             etc.sqsNumOfVisibleMessages(),
         ],[
             dynamodb.dynamodbReadCapacity(),
             dynamodb.dynamodbWriteCapacity(),
             lambda.lambdaConcurrentExecs(),
-            lambda.lambdaErrorLogsCount(errLFs),
+            lambda.lambdaErrorLogsCount(m.logsLambdaErrorLogCount),
         ],[
             etc.wafBlockedRequests(),
         ]

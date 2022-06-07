@@ -2,6 +2,20 @@ import {Construct} from 'constructs';
 import { aws_logs as logs, } from "aws-cdk-lib";
 
 import {name} from 'utils'
+import { Metric } from 'aws-cdk-lib/aws-cloudwatch';
+import { MetricFilterWithNames } from 'helpers/logs';
+
+export const lambdaErrorLogCount = (
+    filters: MetricFilterWithNames[],
+): Metric[] => {
+    return filters.map(
+        filter => new Metric({
+            namespace: filter.metricNamespace,
+            metricName: filter.metricName,
+            label: filter.label,
+        })
+    )
+}
 
 export const createMetricFilter = (
     construct: Construct,

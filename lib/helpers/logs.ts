@@ -8,14 +8,14 @@ import {createMetricFilter} from 'metrics/logs'
 import * as params from 'params'
 import {name} from 'utils'
 
-export type typeMetricFilter = {
+export type MetricFilterWithNames = {
     metricFilter: MetricFilter,
     metricNamespace: string,
     metricName: string,
     label: string,
 }
 
-export const getLambdaLogsMetricsFilters = (construct: Construct): typeMetricFilter[] => {
+export const getLambdaLogsMetricsFilters = (construct: Construct): MetricFilterWithNames[] => {
     const lambdaLogGroups: ILogGroup[] = importLambdaLogGroups(construct);
 
     return lambdaLogGroups.map(
@@ -38,8 +38,7 @@ export const getLambdaLogsMetricsFilters = (construct: Construct): typeMetricFil
     );
   }
 
-
-export const importLambdaLogGroups = (construct: Construct): logs.ILogGroup[] => {
+const importLambdaLogGroups = (construct: Construct): logs.ILogGroup[] => {
     return params.Lambda.functionNames.map(
         _name => logs.LogGroup.fromLogGroupName(
             construct,
