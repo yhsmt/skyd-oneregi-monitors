@@ -1,12 +1,12 @@
 import {Construct} from 'constructs';
 import { aws_logs as logs, } from "aws-cdk-lib";
 
-import * as params from 'params'
 import {name} from 'utils'
 
 export const createMetricFilter = (
     construct: Construct,
     logGroup: logs.ILogGroup,
+    metricNamespace: string,
     metricName: string,
     filterPattern: string,
 ): logs.MetricFilter => {
@@ -15,7 +15,7 @@ export const createMetricFilter = (
         name('oneregi-logs-metric-filters-'+metricName),
         {
             logGroup: logGroup,
-            metricNamespace: name('oneregi-logs-metric-filters'),
+            metricNamespace: metricNamespace,
             metricName: metricName,
             filterPattern: logs.FilterPattern.literal(filterPattern),
             metricValue: '1',

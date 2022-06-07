@@ -3,6 +3,7 @@ import {Function} from "aws-cdk-lib/aws-lambda";
 import {Duration} from "aws-cdk-lib";
 
 import * as params from 'params'
+import { typeMetricFilter } from "helpers/logs";
 
 export const lambdaConcurrentExecs = (): GraphWidget => {
     return new GraphWidget({
@@ -14,12 +15,12 @@ export const lambdaConcurrentExecs = (): GraphWidget => {
     })
 }
 
-export const lambdaErrorLogsCount  = (): GraphWidget => {
-    const metrics = params.Lambda.functionNames.map(
-        funcName => new Metric({
-            namespace: 'Lambda Logs Pattern Filter',
-            metricName: 'ERROR (' + funcName + ')',
-            label: funcName,
+export const lambdaErrorLogsCount  = (errorLogFilters: typeMetricFilter[]): GraphWidget => {
+    const metrics = errorLogFilters.map(
+        filter => new Metric({
+            namespace: filter.metricNamespace,
+            metricName: filter.metricName,
+            label: filter.label,
         })
     );
 

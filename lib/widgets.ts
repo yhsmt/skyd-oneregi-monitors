@@ -10,12 +10,14 @@ import * as r53 from 'widgets/route53';
 
 import {HealthCheck} from 'metrics/route53';
 import {IDatabaseCluster} from 'aws-cdk-lib/aws-rds';
+import { typeMetricFilter } from 'helpers/logs';
 
 // INFO: dashboardのwidgetの順番
 export const widgets = (
     cfdHc: HealthCheck[],
     apiHc: HealthCheck[],
     rdsCs: IDatabaseCluster[],
+    errLFs: typeMetricFilter[],
     ): GraphWidget[][] => {
     return [
         [
@@ -37,7 +39,7 @@ export const widgets = (
             dynamodb.dynamodbReadCapacity(),
             dynamodb.dynamodbWriteCapacity(),
             lambda.lambdaConcurrentExecs(),
-            lambda.lambdaErrorLogsCount(),
+            lambda.lambdaErrorLogsCount(errLFs),
         ],[
             etc.wafBlockedRequests(),
         ]
