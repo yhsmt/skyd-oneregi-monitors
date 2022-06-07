@@ -1,20 +1,9 @@
 import {GraphWidget, GraphWidgetView, Metric} from 'aws-cdk-lib/aws-cloudwatch';
-import {IDatabaseCluster} from 'aws-cdk-lib/aws-rds';
 import {Duration} from 'aws-cdk-lib';
 
 import * as params from 'params'
 
-export const rdsProxyConnections = (): GraphWidget => {
-    const metrics = params.RDS.proxyNames.map(
-        proxyName => new Metric({
-            namespace: 'AWS/RDS',
-            metricName: 'ClientConnections',
-            dimensionsMap: {
-                ProxyName: proxyName
-            },
-        })
-    );
-
+export const rdsProxyConnections = (metrics: Metric[]): GraphWidget => {
     return new GraphWidget({
         title: 'RDS Proxy 接続数',
         region: params.Region.TKO,
@@ -23,43 +12,18 @@ export const rdsProxyConnections = (): GraphWidget => {
         statistic: 'Average',
         view: GraphWidgetView.TIME_SERIES,
         period: Duration.seconds(60),
-    })
+    });
 }
 
-export const rdsConnections = (): GraphWidget => {
-    return rdsWidgetWithRoles(
-        'RDS 接続数',
-        'DatabaseConnections',
-        ['READER', 'WRITER'],
-    )
+export const rdsConnections = (metrics: Metric[]): GraphWidget => {
+    return graphWidget('RDS 接続数', metrics);
 }
 
-export const rdsDmlLatency = (): GraphWidget => {
-    return rdsWidgetWithRoles(
-        'RDS DML実行タイム',
-        'DMLLatency',
-        ['WRITER'],
-    )
+export const rdsDmlLatency = (metrics: Metric[]): GraphWidget => {
+    return graphWidget('RDS DML実行タイム', metrics);
 }
 
-const rdsWidgetWithRoles = (
-    title: string,
-    metricName: string,
-    roles: string[],
-    ): GraphWidget => {
-    const metrics = params.RDS.clusters.flatMap(
-        cluster => roles.map(
-            role => new Metric({
-                namespace: 'AWS/RDS',
-                metricName: metricName,
-                dimensionsMap: {
-                    Role: role,
-                    DBClusterIdentifier: cluster.id
-                },
-            })
-        )
-    );
-
+const graphWidget = (title: string, metrics: Metric[]): GraphWidget => {
     return new GraphWidget({
         title: title,
         region: params.Region.TKO,
@@ -71,42 +35,27 @@ const rdsWidgetWithRoles = (
     })
 }
 
-export const rdsCpuUtilization = (clusters: IDatabaseCluster[]): GraphWidget => {
-    return rdsWidgetWithInstances(
-        clusters,
+export const rdsCpuUtilization = (metrics: Metric[]): GraphWidget => {
+    return graphWidgetWithBounds(
         'RDS CPU使用率',
-        'CPUUtilization',
+        metrics,
         {max: 100, min: 0},
     )
 }
 
-export const rdsFreeableMemory = (clusters: IDatabaseCluster[]): GraphWidget => {
-    return rdsWidgetWithInstances(
-        clusters,
+export const rdsFreeableMemory = (metrics: Metric[]): GraphWidget => {
+    return graphWidgetWithBounds(
         'RDS 空きメモリ量',
-        'FreeableMemory',
+        metrics,
         {max: undefined, min: 0},
     )
 }
 
-const rdsWidgetWithInstances = (
-    clusters: IDatabaseCluster[],
+const graphWidgetWithBounds = (
     title: string,
-    metricName: string,
+    metrics: Metric[],
     leftYAxis: {max: number|undefined, min: number|undefined},
 ): GraphWidget => {
-    const metrics = clusters.flatMap(
-        instance => instance.instanceIdentifiers.map(
-            instanceId => new Metric({
-                namespace: 'AWS/RDS',
-                metricName: metricName,
-                dimensionsMap: {
-                    DBInstanceIdentifier: instanceId
-                },
-            })
-        )
-    );
-
     return new GraphWidget({
         title: title,
         region: params.Region.TKO,
@@ -119,17 +68,7 @@ const rdsWidgetWithInstances = (
     })
 }
 
-export const rdsSlowQueryLogCount = (): GraphWidget => {
-    const metrics = params.RDS.clusters.map(
-        cluster => new Metric({
-            namespace: 'AWS/Logs',
-            metricName: 'IncomingLogEvents',
-            dimensionsMap: {
-                LogGroupName: '/aws/rds/cluster/' + cluster.id + '/slowquery'
-            },
-        })
-    );
-
+export const rdsSlowQueryLogCount = (metrics: Metric[]): GraphWidget => {
     return new GraphWidget({
         title: 'RDS スロークエリログ発生数',
         region: params.Region.TKO,

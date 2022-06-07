@@ -1,53 +1,31 @@
 import {Construct} from 'constructs';
-import {
-    aws_route53 as r53,
-} from "aws-cdk-lib";
+import { Metric } from 'aws-cdk-lib/aws-cloudwatch';
 
-import {name} from 'utils'
+import * as r53h from 'helpers/route53'
 
-export type HealthCheck = {
-    healthCheck: r53.CfnHealthCheck,
-    name: string
+export const getCfHealthCheckMetrics = (construct: Construct): Metric[] => {
+    return getHealthCheckMetrics(
+        r53h.getCfHealthChecks(construct)
+    );
 }
 
-export const createHealthCheck = (
-    construct: Construct,
-    nameTrunk: string,
-    hostDomainName: string,
-    resourcePath: string,
-): r53.CfnHealthCheck => {
-    const props: r53.CfnHealthCheckProps = {
-        healthCheckConfig: {
-            type: 'HTTPS',
-            port: 443,
-            fullyQualifiedDomainName: hostDomainName,
-            resourcePath: resourcePath,
-            failureThreshold: 3,
-            enableSni: true,
+export const getApiHealthCheckMetrics = (construct: Construct): Metric[] => {
+    return getHealthCheckMetrics(
+        r53h.getApiHealthChecks(construct)
+    );
+}
 
-            // the properties below are optional
-            /*
-            alarmIdentifier: {
-                name: 'name',
-                region: 'region',
+const getHealthCheckMetrics = (
+    hcAndNames: r53h.HealthCheckAndName[]
+): Metric[] => {
+    return hcAndNames.map(
+        hcn => new Metric({
+            namespace: 'AWS/Route53',
+            metricName: 'HealthCheckStatus',
+            dimensionsMap: {
+                HealthCheckId: hcn.healthCheck.attrHealthCheckId,
             },
-            childHealthChecks: ['childHealthChecks'],
-            healthThreshold: 123,
-            insufficientDataHealthStatus: 'insufficientDataHealthStatus',
-            inverted: false,
-            ipAddress: 'ipAddress',
-            measureLatency: false,
-            regions: ['regions'],
-            requestInterval: 123,
-            routingControlArn: 'routingControlArn',
-            searchString: 'searchString',
-             */
-        }
-    };
-
-    return new r53.CfnHealthCheck(
-        construct,
-        name(`oneregi-health-check-${nameTrunk}`),
-        props,
+            label: hcn.name,
+        })
     );
 }

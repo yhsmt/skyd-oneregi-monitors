@@ -1,42 +1,65 @@
 import {
   Aws, CfnOutput, Stack, StackProps
 } from 'aws-cdk-lib';
-import {Dashboard} from 'aws-cdk-lib/aws-cloudwatch';
+import {Dashboard, Metric} from 'aws-cdk-lib/aws-cloudwatch';
 import {IDatabaseCluster} from 'aws-cdk-lib/aws-rds';
-import {ILogGroup} from 'aws-cdk-lib/aws-logs';
 import {Construct} from 'constructs';
 
-import * as params from 'params';
 import {name} from 'utils';
 import {widgets} from 'widgets'
-import {createMetricFilter} from 'metrics/logs'
-import {createHealthCheck, HealthCheck} from 'metrics/route53'
-import {ImportedApi, importRestApis} from 'helpers/api-gateway'
+import {
+  getCfHealthCheckMetrics, 
+  getApiHealthCheckMetrics
+} from 'metrics/route53'
 import {importRdsClusters} from 'helpers/rds'
-import {importLambdaLogGroups, typeMetricFilter} from 'helpers/logs'
+import {getLambdaLogsMetricsFilters, typeMetricFilter} from 'helpers/logs'
+import  * as apigw from 'metrics/api-gateway'
+import  * as rds from 'metrics/rds'
 
 
 export class OneregiMonitorsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // Route53 Health Checks
-    const cfHealthChecks: HealthCheck[] = this.getCfHealthChecks();
-    const apiHealthChecks: HealthCheck[] = this.getApiHealthChecks();
-
     // import RDS Clusters
     const rdsClusters: IDatabaseCluster[] = importRdsClusters(this);
 
+    // Metrics
+    const cfHealthCheckMetrics:   Metric[] = getCfHealthCheckMetrics(this);
+    const apiHealthChecksMetrics: Metric[] = getApiHealthCheckMetrics(this);
+
+    const apiCountMetrics:    Metric[] = apigw.countMetrics();
+    const apiLatencyMetrics:  Metric[] = apigw.latencyMetrics();
+    const api5XXErrorMetrics: Metric[] = apigw.error5XXMetrics();
+
+    const rdsProxyConnMetrics:  Metric[] = rds.proxyConnectionMetrics();
+    const rdsConnectionMetrics: Metric[] = rds.connectionMetrics();
+    const rdsDmlLatencyMetrics: Metric[] = rds.dmlLatencyMetrics();
+    const rdsCpuUsageMetrics:   Metric[] = rds.cpuUsageMetrics(rdsClusters);
+    const rdsFreeMemMetrics:    Metric[] = rds.freeMemMetrics(rdsClusters);
+    const rdsSlowQueryLogCount: Metric[] = rds.slowQueryLogMetrics(rdsClusters);
+
     // MetricFilters
-    const lambdaLogsMetricsFilters: typeMetricFilter[] = this.getLambdaLogsMetricsFilters();
+    const lambdaLogsMetricsFilters: typeMetricFilter[] = getLambdaLogsMetricsFilters(this);
 
     // CloudWatch Dashboard
     const dashboard = new Dashboard(this, 'SampleLambdaDashboard', {
       dashboardName: name('sample-dashboard'),
       widgets: widgets(
-          cfHealthChecks,
-          apiHealthChecks,
-          rdsClusters,
+          cfHealthCheckMetrics,
+          apiHealthChecksMetrics,
+
+          apiCountMetrics,
+          apiLatencyMetrics,
+          api5XXErrorMetrics,
+
+          rdsProxyConnMetrics,
+          rdsConnectionMetrics,
+          rdsDmlLatencyMetrics,
+          rdsCpuUsageMetrics, 
+          rdsFreeMemMetrics,  
+          rdsSlowQueryLogCount,
+
           lambdaLogsMetricsFilters,
       ),
     });
@@ -47,58 +70,5 @@ export class OneregiMonitorsStack extends Stack {
       description: 'URL of CloudWatch Dashboard',
       exportName: 'CloudWatchDashboardURL'
     });
-  }
-
-  getLambdaLogsMetricsFilters(): typeMetricFilter[] {
-    const lambdaLogGroups: ILogGroup[] = importLambdaLogGroups(this);
-
-    return lambdaLogGroups.map(
-        logGroup => {
-          const metricNamespace = name('oneregi-logs-metric-filters');
-          const metricName = logGroup.logGroupName + '/errors';
-          return {
-            metricFilter: createMetricFilter(
-                this,
-                logGroup,
-                metricNamespace,
-                metricName,
-                'ERROR',
-              ),
-            metricNamespace: metricNamespace,
-            metricName: metricName,
-            label: logGroup.logGroupName.split('/').slice(-1)[0],
-          };
-        }
-    );
-  }
-
-  getApiHealthChecks(): HealthCheck[] {
-    const restApis: ImportedApi[] = importRestApis(this);
-    return restApis.map(
-        restApi => {
-          return {
-            healthCheck: createHealthCheck(
-                this,
-                `rest-api-${restApi.api.restApiId}`,
-                `${restApi.api.restApiId}.execute-api.${Aws.REGION}.amazonaws.com`,
-                `/${(restApi.api.deploymentStage ?? 'prod')}/ping`
-            ),
-            name: restApi.name,
-          };
-        }
-    );
-  }
-
-  getCfHealthChecks(): HealthCheck[] {
-    return params.CloudFront.distURLs.map(
-        cfdURL => {
-          return {
-            healthCheck: createHealthCheck(
-                this, `cf-${cfdURL}`, cfdURL, '/'
-            ),
-            name: cfdURL,
-          }
-        }
-    );
   }
 }
