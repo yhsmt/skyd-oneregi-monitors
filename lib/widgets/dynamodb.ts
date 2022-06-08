@@ -22,6 +22,6 @@ const dynamodbWidget = (
         width: 6,
         statistic: 'Average',
         view: GraphWidgetView.TIME_SERIES,
-        period: Duration.seconds(60),
+        period: Duration.minutes(1),
     });
 }

@@ -1,3 +1,4 @@
+import { Duration } from 'aws-cdk-lib';
 import {Metric} from 'aws-cdk-lib/aws-cloudwatch';
 
 import * as params from 'params'
@@ -11,6 +12,7 @@ export const sqsNumOfVisibleMessages = (): Metric[] => {
                 QueueName: qname
             },
             label: qname,
+            period: Duration.minutes(1),
         })
     );
 }
@@ -26,6 +28,7 @@ export const wafBlockedRequests = (): Metric[] => {
                 Rule: 'ALL'
             },
             label: acl,
+            period: Duration.minutes(1),
             region: params.Region.TKO,
         })
     );

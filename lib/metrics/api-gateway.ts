@@ -1,3 +1,4 @@
+import { Duration } from 'aws-cdk-lib';
 import { Metric } from 'aws-cdk-lib/aws-cloudwatch';
 
 import { ApiGateway } from 'params';
@@ -23,6 +24,7 @@ const apiGatewayMetrics = (metricName: string): Metric[] => {
                 ApiName: api.name,
             },
             label: api.name,
+            period: Duration.minutes(1),
         })
     );
 }

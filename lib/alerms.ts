@@ -5,6 +5,7 @@ import { Metrics } from 'metrics';
 import * as apigw from 'alerm-props/api-gateway';
 import * as lambda from 'alerm-props/lambda';
 import * as rds from 'alerm-props/rds';
+import * as etc from 'alerm-props/etc';
 
 import { name } from 'utils';
 
@@ -20,5 +21,8 @@ export const setAlerms = (c: Construct, metrics: Metrics) => {
     metrics.logsLambdaErrorLogCount.map(setAlerm(lambda.errorLogCounts));
 
     metrics.rdsConnectionMetrics.map(setAlerm(rds.dbConnections));
-    metrics.rdsSlowQueryLogCount.map(setAlerm(rds.slowQueryLogCounts))
+    metrics.rdsSlowQueryLogCount.map(setAlerm(rds.slowQueryLogCounts));
+
+    metrics.sqsNumOfVisibleMessages.map(setAlerm(etc.sqsNumOfVisibleMessages));
+    metrics.wafBlockedRequests.map(setAlerm(etc.wafBlockedRequests));
 };

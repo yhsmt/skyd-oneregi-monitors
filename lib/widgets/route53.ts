@@ -28,6 +28,6 @@ const route53HealthChecks = (
         width: 6,
         statistic: 'Average',
         view: GraphWidgetView.TIME_SERIES,
-        period: Duration.seconds(300),
+        period: Duration.minutes(1),
     })
 }

@@ -8,7 +8,6 @@ export const apiGatewayRequests = (metrics: Metric[]): GraphWidget => {
         'ApiGateway リクエスト数',
         metrics,
         'Sum',
-        60
     )
 }
 
@@ -17,7 +16,6 @@ export const apiGatewayLatency = (metrics: Metric[]): GraphWidget => {
         'ApiGateway レスポンスタイム',
         metrics,
         'Average',
-        300
     )
 }
 
@@ -26,7 +24,6 @@ export const apiGateway5XXError = (metrics: Metric[]): GraphWidget => {
         'ApiGateway 5XXエラー発生数',
         metrics,
         'Average',
-        300
     )
 }
 
@@ -34,7 +31,6 @@ const apiGatewayWidget = (
     title: string,
     metrics: Metric[],
     statistic: string,
-    period_sec: number,
     ): GraphWidget => {
     return new GraphWidget({
         title: title,
@@ -43,6 +39,6 @@ const apiGatewayWidget = (
         width: 6,
         statistic: statistic,
         view: GraphWidgetView.TIME_SERIES,
-        period: Duration.seconds(period_sec),
+        period: Duration.minutes(1),
     })
 }

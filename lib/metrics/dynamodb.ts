@@ -1,3 +1,4 @@
+import { Duration } from 'aws-cdk-lib';
 import { Metric } from 'aws-cdk-lib/aws-cloudwatch';
 
 import { DynamoDB } from 'params';
@@ -18,6 +19,8 @@ const dynamoDbMetrics = (metricName: string): Metric[] => {
             dimensionsMap: {
                 TableName: tableName
             },
+            label: tableName,
+            period: Duration.minutes(1),
         })
     );
 }

@@ -11,7 +11,7 @@ export const sqsNumOfVisibleMessages  = (metrics: Metric[]): GraphWidget => {
         width: 6,
         statistic: 'SampleCount',
         view: GraphWidgetView.TIME_SERIES,
-        period: Duration.seconds(60),
+        period: Duration.minutes(1),
     })
 }
 
@@ -23,6 +23,6 @@ export const wafBlockedRequests  = (metrics: Metric[]): GraphWidget => {
         width: 6,
         statistic: 'Sum',
         view: GraphWidgetView.TIME_SERIES,
-        period: Duration.seconds(60),
+        period: Duration.minutes(1),
     })
 }

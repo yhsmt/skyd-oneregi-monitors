@@ -11,7 +11,7 @@ export const rdsProxyConnections = (metrics: Metric[]): GraphWidget => {
         width: 6,
         statistic: 'Average',
         view: GraphWidgetView.TIME_SERIES,
-        period: Duration.seconds(60),
+        period: Duration.minutes(1),
     });
 }
 
@@ -31,7 +31,7 @@ const graphWidget = (title: string, metrics: Metric[]): GraphWidget => {
         width: 6,
         statistic: 'Average',
         view: GraphWidgetView.TIME_SERIES,
-        period: Duration.seconds(60),
+        period: Duration.minutes(1),
     })
 }
 
@@ -64,7 +64,7 @@ const graphWidgetWithBounds = (
         width: 6,
         statistic: 'Average',
         view: GraphWidgetView.TIME_SERIES,
-        period: Duration.seconds(60),
+        period: Duration.minutes(1),
     })
 }
 
@@ -76,6 +76,6 @@ export const rdsSlowQueryLogCount = (metrics: Metric[]): GraphWidget => {
         width: 6,
         statistic: 'SampleCount',
         view: GraphWidgetView.TIME_SERIES,
-        period: Duration.seconds(60),
+        period: Duration.minutes(1),
     })
 }

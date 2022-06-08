@@ -1,5 +1,5 @@
 import {Construct} from 'constructs';
-import { aws_logs as logs, } from "aws-cdk-lib";
+import { aws_logs as logs, Duration, } from "aws-cdk-lib";
 
 import {name} from 'utils'
 import { Metric } from 'aws-cdk-lib/aws-cloudwatch';
@@ -13,6 +13,7 @@ export const lambdaErrorLogCount = (
             namespace: filter.metricNamespace,
             metricName: filter.metricName,
             label: filter.label,
+            period: Duration.minutes(1),
         })
     )
 }

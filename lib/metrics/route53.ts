@@ -1,3 +1,4 @@
+import { Duration } from 'aws-cdk-lib';
 import { Metric } from 'aws-cdk-lib/aws-cloudwatch';
 
 import * as r53h from 'helpers/route53'
@@ -13,6 +14,7 @@ export const getHealthCheckMetrics = (
                 HealthCheckId: hcn.healthCheck.attrHealthCheckId,
             },
             label: hcn.name,
+            period: Duration.minutes(1),
         })
     );
 }

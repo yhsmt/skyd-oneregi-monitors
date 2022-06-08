@@ -1,3 +1,4 @@
+import { Duration } from 'aws-cdk-lib';
 import { Metric } from 'aws-cdk-lib/aws-cloudwatch';
 import {IDatabaseCluster} from 'aws-cdk-lib/aws-rds';
 
@@ -11,6 +12,7 @@ export const proxyConnectionMetrics = (): Metric[] => {
             dimensionsMap: {
                 ProxyName: proxyName
             },
+            period: Duration.minutes(1),
         })
     );
 }
@@ -40,6 +42,7 @@ const metricsWithClusters = (
                     Role: role,
                     DBClusterIdentifier: cluster.id
                 },
+                period: Duration.minutes(1),
                 label: `${cluster.id}-${role}`
             })
         )
@@ -66,6 +69,7 @@ const metricsWithInstances = (
                 dimensionsMap: {
                     DBInstanceIdentifier: instanceId
                 },
+                period: Duration.minutes(1),
                 label: instanceId,
             })
         )
@@ -80,6 +84,7 @@ export const slowQueryLogMetrics = (clusters: IDatabaseCluster[]): Metric[] => {
             dimensionsMap: {
                 LogGroupName: `/aws/rds/cluster/${cluster.clusterIdentifier}/slowquery`
             },
+            period: Duration.minutes(1),
             label: `${cluster.clusterIdentifier}-slowquery`,
         })
     );
