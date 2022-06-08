@@ -40,6 +40,7 @@ const metricsWithClusters = (
                     Role: role,
                     DBClusterIdentifier: cluster.id
                 },
+                label: `${cluster.id}-${role}`
             })
         )
     );
@@ -65,6 +66,7 @@ const metricsWithInstances = (
                 dimensionsMap: {
                     DBInstanceIdentifier: instanceId
                 },
+                label: instanceId,
             })
         )
     );
@@ -76,8 +78,9 @@ export const slowQueryLogMetrics = (clusters: IDatabaseCluster[]): Metric[] => {
             namespace: 'AWS/Logs',
             metricName: 'IncomingLogEvents',
             dimensionsMap: {
-                LogGroupName: '/aws/rds/cluster/' + cluster.clusterIdentifier + '/slowquery'
+                LogGroupName: `/aws/rds/cluster/${cluster.clusterIdentifier}/slowquery`
             },
+            label: `${cluster.clusterIdentifier}-slowquery`,
         })
     );
 }

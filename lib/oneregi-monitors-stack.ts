@@ -5,12 +5,14 @@ import {Dashboard} from 'aws-cdk-lib/aws-cloudwatch';
 import {IDatabaseCluster} from 'aws-cdk-lib/aws-rds';
 import {Construct} from 'constructs';
 
-import {name} from 'utils';
-import {widgets} from 'widgets';
 import * as logsh from 'helpers/logs';
 import * as r53h from 'helpers/route53'
 import * as rdsh from 'helpers/rds'
+
 import { getMetrics, Metrics } from 'metrics';
+import { setAlerms } from 'alerms';
+import {widgets} from 'widgets';
+import {name} from 'utils';
 
 export class OneregiMonitorsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -30,6 +32,9 @@ export class OneregiMonitorsStack extends Stack {
     const metrics: Metrics = getMetrics(
       cfHealthChecks, apiHealthChecks, rdsClusters, lambdaLogsMetricsFilters
     );
+
+    // Alerms
+    setAlerms(this, metrics);
 
     // CloudWatch Dashboard
     const dashboard = new Dashboard(this, 'SampleLambdaDashboard', {

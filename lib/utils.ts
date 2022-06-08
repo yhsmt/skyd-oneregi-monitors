@@ -19,6 +19,6 @@ export const lackOfEnvironmentVals = (): boolean => {
     }
 };
 
-export const name = (trunk: string): string => {
-    return params.Common.appStage + '-' + trunk;
+export const name = (trunk: string, delimiter: string = '-'): string => {
+    return params.Common.appStage + delimiter + trunk;
 };
