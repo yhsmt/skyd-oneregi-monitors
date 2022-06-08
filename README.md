@@ -51,7 +51,7 @@ $ yarn cdk deploy
 スタック削除
 
 ```bash
-$ yarn cdk deploy
+$ yarn cdk destroy
 ```
 
 ## 設定
