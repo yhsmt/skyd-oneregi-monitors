@@ -36,6 +36,11 @@ type typeRds = {
     }[]
 }
 
+type typeSns = {
+    alertEmails: string[],
+}
+
+
 /***** ここから対象リソース設定 *****/
 
 export const ApiGateway: typeApiGateway = {
@@ -88,6 +93,12 @@ export const RDS: typeRds = {
             ],
         }
     ],
+}
+
+export const SNS: typeSns = {
+    alertEmails: [
+        'hoge@example.com'
+    ]
 }
 
 export const SQS = {

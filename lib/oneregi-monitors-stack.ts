@@ -4,10 +4,12 @@ import {
 import {Dashboard} from 'aws-cdk-lib/aws-cloudwatch';
 import {IDatabaseCluster} from 'aws-cdk-lib/aws-rds';
 import {Construct} from 'constructs';
+import {Topic} from 'aws-cdk-lib/aws-sns';
 
 import * as logsh from 'helpers/logs';
 import * as r53h from 'helpers/route53'
 import * as rdsh from 'helpers/rds'
+import * as sns from 'helpers/sns'
 
 import { getMetrics, Metrics } from 'metrics';
 import { setAlerms } from 'alerms';
@@ -28,13 +30,16 @@ export class OneregiMonitorsStack extends Stack {
     // MetricFilters
     const lambdaLogsMetricsFilters: logsh.MetricFilterWithNames[] = logsh.getLambdaLogsMetricsFilters(this);
 
+    // SNS Topic
+    const snsTopicForAlert: Topic = sns.createSNSTopic(this);
+
     // Metrics
     const metrics: Metrics = getMetrics(
       cfHealthChecks, apiHealthChecks, rdsClusters, lambdaLogsMetricsFilters
     );
 
     // Alerms
-    setAlerms(this, metrics);
+    setAlerms(this, metrics, snsTopicForAlert);
 
     // CloudWatch Dashboard
     const dashboard = new Dashboard(this, 'SampleLambdaDashboard', {
