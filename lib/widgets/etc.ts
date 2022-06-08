@@ -3,18 +3,7 @@ import {Duration} from 'aws-cdk-lib';
 
 import * as params from 'params'
 
-export const sqsNumOfVisibleMessages  = (): GraphWidget => {
-    const metrics = params.SQS.queueNames.map(
-        qname => new Metric({
-            namespace: 'AWS/SQS',
-            metricName: 'ApproximateNumberOfMessagesVisible',
-            dimensionsMap: {
-                QueueName: qname
-            },
-            label: qname,
-        })
-    );
-
+export const sqsNumOfVisibleMessages  = (metrics: Metric[]): GraphWidget => {
     return new GraphWidget({
         title: 'SQS キュー滞留数',
         region: params.Region.TKO,
@@ -26,21 +15,7 @@ export const sqsNumOfVisibleMessages  = (): GraphWidget => {
     })
 }
 
-export const wafBlockedRequests  = (): GraphWidget => {
-    const metrics = params.WAF.aclNames.map(
-        acl => new Metric({
-            namespace: 'AWS/WAFV2',
-            metricName: 'BlockedRequests',
-            dimensionsMap: {
-                WebACL: acl,
-                Region: params.Region.TKO,
-                Rule: 'ALL'
-            },
-            label: acl,
-            region: params.Region.TKO,
-        })
-    );
-
+export const wafBlockedRequests  = (metrics: Metric[]): GraphWidget => {
     return new GraphWidget({
         title: 'WAF ブロック数（API Gateway）',
         region: params.Region.VA,

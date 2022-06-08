@@ -7,17 +7,10 @@ import {Construct} from 'constructs';
 
 import {name} from 'utils';
 import {widgets} from 'widgets';
-import {importRdsClusters} from 'helpers/rds';
-import {
-  getLambdaLogsMetricsFilters, 
-  MetricFilterWithNames
-} from 'helpers/logs';
+import * as logsh from 'helpers/logs';
 import * as r53h from 'helpers/route53'
-import * as r53 from 'metrics/route53';
-import * as apigw from 'metrics/api-gateway';
-import * as rds from 'metrics/rds';
-import * as logs from 'metrics/logs';
-import { Metrics } from 'metrics';
+import * as rdsh from 'helpers/rds'
+import { getMetrics, Metrics } from 'metrics';
 
 export class OneregiMonitorsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -28,29 +21,15 @@ export class OneregiMonitorsStack extends Stack {
     const apiHealthChecks: r53h.HealthCheckWithName[] = r53h.getApiHealthChecks(this);
 
     // import RDS Clusters
-    const rdsClusters: IDatabaseCluster[] = importRdsClusters(this);
+    const rdsClusters: IDatabaseCluster[] = rdsh.importRdsClusters(this);
 
     // MetricFilters
-    const lambdaLogsMetricsFilters: MetricFilterWithNames[] = getLambdaLogsMetricsFilters(this);
+    const lambdaLogsMetricsFilters: logsh.MetricFilterWithNames[] = logsh.getLambdaLogsMetricsFilters(this);
 
     // Metrics
-    const metrics: Metrics = {
-      cfHealthCheckMetrics:   r53.getHealthCheckMetrics(cfHealthChecks),
-      apiHealthChecksMetrics: r53.getHealthCheckMetrics(apiHealthChecks),
-      
-      apiCountMetrics:    apigw.countMetrics(),
-      apiLatencyMetrics:  apigw.latencyMetrics(),
-      api5XXErrorMetrics: apigw.error5XXMetrics(),
-
-      rdsProxyConnMetrics:  rds.proxyConnectionMetrics(),
-      rdsConnectionMetrics: rds.connectionMetrics(),
-      rdsDmlLatencyMetrics: rds.dmlLatencyMetrics(),
-      rdsCpuUsageMetrics:   rds.cpuUsageMetrics(rdsClusters),
-      rdsFreeMemMetrics:    rds.freeMemMetrics(rdsClusters),
-      rdsSlowQueryLogCount: rds.slowQueryLogMetrics(rdsClusters),
-
-      logsLambdaErrorLogCount: logs.lambdaErrorLogCount(lambdaLogsMetricsFilters),
-    }
+    const metrics: Metrics = getMetrics(
+      cfHealthChecks, apiHealthChecks, rdsClusters, lambdaLogsMetricsFilters
+    );
 
     // CloudWatch Dashboard
     const dashboard = new Dashboard(this, 'SampleLambdaDashboard', {

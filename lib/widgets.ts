@@ -1,4 +1,4 @@
-import {GraphWidget, Metric} from 'aws-cdk-lib/aws-cloudwatch';
+import {GraphWidget} from 'aws-cdk-lib/aws-cloudwatch';
 
 import * as apigw from 'widgets/api-gateway';
 import * as dynamodb from 'widgets/dynamodb';
@@ -26,14 +26,14 @@ export const widgets = (m: Metrics): GraphWidget[][] => {
             rds.rdsCpuUtilization(m.rdsCpuUsageMetrics),
             rds.rdsFreeableMemory(m.rdsFreeMemMetrics),
             rds.rdsSlowQueryLogCount(m.rdsSlowQueryLogCount),
-            etc.sqsNumOfVisibleMessages(),
+            etc.sqsNumOfVisibleMessages(m.sqsNumOfVisibleMessages),
         ],[
-            dynamodb.dynamodbReadCapacity(),
-            dynamodb.dynamodbWriteCapacity(),
-            lambda.lambdaConcurrentExecs(),
+            dynamodb.dynamodbReadCapacity(m.dynamoDbReadCapacity),
+            dynamodb.dynamodbWriteCapacity(m.dynamoDbWriteCapacity),
+            lambda.lambdaConcurrentExecs(m.lambdaConcurrentExecs),
             lambda.lambdaErrorLogsCount(m.logsLambdaErrorLogCount),
         ],[
-            etc.wafBlockedRequests(),
+            etc.wafBlockedRequests(m.wafBlockedRequests),
         ]
     ]
 }

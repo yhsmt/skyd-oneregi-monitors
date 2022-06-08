@@ -1,15 +1,12 @@
-import {GraphWidget, GraphWidgetView, Metric, Unit} from 'aws-cdk-lib/aws-cloudwatch';
-import {Function} from 'aws-cdk-lib/aws-lambda';
+import {GraphWidget, GraphWidgetView, Metric} from 'aws-cdk-lib/aws-cloudwatch';
 import {Duration} from 'aws-cdk-lib';
 
 import * as params from 'params'
 
-export const lambdaConcurrentExecs = (): GraphWidget => {
+export const lambdaConcurrentExecs = (metrics: Metric[]): GraphWidget => {
     return new GraphWidget({
         title: 'Lambda関数の同時実行数',
-        left: [Function.metricAllConcurrentExecutions({
-            unit: Unit.COUNT
-        })],
+        left: metrics,
         width: 6
     })
 }
