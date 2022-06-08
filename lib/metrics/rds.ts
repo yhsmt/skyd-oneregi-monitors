@@ -12,6 +12,7 @@ export const proxyConnectionMetrics = (): Metric[] => {
             dimensionsMap: {
                 ProxyName: proxyName
             },
+            label: proxyName,
             period: Duration.minutes(1),
         })
     );

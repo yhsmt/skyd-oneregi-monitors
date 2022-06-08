@@ -1,7 +1,7 @@
 import { CreateAlarmOptions, ComparisonOperator, Metric } from 'aws-cdk-lib/aws-cloudwatch';
 import { name } from 'utils';
 
-export const dbConnections = (m: Metric): CreateAlarmOptions => {
+export const proxyConnections = (m: Metric): CreateAlarmOptions => {
     return {
         evaluationPeriods: 1,  // min
         threshold: 72,         // ms

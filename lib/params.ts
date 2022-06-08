@@ -41,6 +41,10 @@ type typeSns = {
 }
 
 
+
+
+
+
 /***** ここから対象リソース設定 *****/
 
 export const ApiGateway: typeApiGateway = {

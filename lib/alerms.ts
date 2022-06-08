@@ -7,6 +7,7 @@ import { Metrics } from 'metrics';
 import * as apigw from 'alerm-props/api-gateway';
 import * as lambda from 'alerm-props/lambda';
 import * as rds from 'alerm-props/rds';
+import * as r53 from 'alerm-props/route53';
 import * as etc from 'alerm-props/etc';
 
 import { name } from 'utils';
@@ -19,13 +20,16 @@ export const setAlerms = (c: Construct, metrics: Metrics, topic: Topic) => {
         }
     };
 
+    metrics.cfHealthCheckMetrics.map(setAlerm(r53.healthCheck))
+
+    metrics.apiHealthChecksMetrics.map(setAlerm(apigw.healthCheck));
     metrics.apiLatencyMetrics.map(setAlerm(apigw.apiLatency));
     metrics.api5XXErrorMetrics.map(setAlerm(apigw.error5XX));
 
     metrics.lambdaConcurrentExecs.map(setAlerm(lambda.concurrentExecs));
     metrics.logsLambdaErrorLogCount.map(setAlerm(lambda.errorLogCounts));
 
-    metrics.rdsConnectionMetrics.map(setAlerm(rds.dbConnections));
+    metrics.rdsProxyConnMetrics.map(setAlerm(rds.proxyConnections));
     metrics.rdsSlowQueryLogCount.map(setAlerm(rds.slowQueryLogCounts));
 
     metrics.sqsNumOfVisibleMessages.map(setAlerm(etc.sqsNumOfVisibleMessages));
