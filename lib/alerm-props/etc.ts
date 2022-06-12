@@ -13,7 +13,7 @@ export const sqsNumOfVisibleMessages = (m: Metric): CreateAlarmOptions => {
 export const wafBlockedRequests = (m: Metric): CreateAlarmOptions => {
     return {
         evaluationPeriods: 1,
-        threshold: 1,        // count
+        threshold: 2400,        // count
         comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
         alarmName: name(`WAF Blocked Requests ${m.label}`, ' '),
     }

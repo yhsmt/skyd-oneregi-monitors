@@ -28,7 +28,8 @@ export const wafBlockedRequests = (): Metric[] => {
                 Rule: 'ALL'
             },
             label: acl,
-            period: Duration.minutes(1),
+            period: Duration.days(1),
+            statistic: 'Sum',
             region: params.Region.TKO,
         })
     );
